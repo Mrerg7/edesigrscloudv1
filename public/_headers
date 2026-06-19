@@ -1,0 +1,14 @@
+/
+  Link: <https://edesigrs.cloud/>; rel="canonical"
+
+/index.html
+  X-Robots-Tag: noindex
+
+/sitemap-index.xml
+  Content-Type: application/xml; charset=utf-8
+
+/sitemap-0.xml
+  Content-Type: application/xml; charset=utf-8
+
+/404.html
+  X-Robots-Tag: noindex
