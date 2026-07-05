@@ -15,6 +15,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+const canonicalHref = canonicalURL.href;
 const publishedDate = '2026-06-08';
 
 const structuredData = {
@@ -22,30 +23,30 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'WebSite',
-      '@id': `${SITE.url}/#website`,
-      url: SITE.url,
+      '@id': `${canonicalHref}#website`,
+      url: canonicalHref,
       name: SITE.name,
       description,
       inLanguage: 'en-US',
     },
     {
       '@type': 'WebPage',
-      '@id': `${SITE.url}/#webpage`,
-      url: SITE.url,
+      '@id': `${canonicalHref}#webpage`,
+      url: canonicalHref,
       name: title,
       description,
-      isPartOf: { '@id': `${SITE.url}/#website` },
+      isPartOf: { '@id': `${canonicalHref}#website` },
       datePublished: publishedDate,
       dateModified: publishedDate,
       inLanguage: 'en-US',
     },
     {
       '@type': 'Product',
-      '@id': `${SITE.url}/#product`,
+      '@id': `${canonicalHref}#product`,
       name: 'edesigrs.cloud Premium Domain Name',
       description:
         'The cloud-native premium domain for electronic designers, generative artists, AI-powered creative platforms, and cloud-based design studios. Available for acquisition.',
-      url: SITE.url,
+      url: canonicalHref,
       category: 'Premium Domain Name',
       brand: {
         '@type': 'Brand',
@@ -116,9 +117,9 @@ const structuredData = {
     },
     {
       '@type': 'Organization',
-      '@id': `${SITE.url}/#organization`,
+      '@id': `${canonicalHref}#organization`,
       name: SITE.name,
-      url: SITE.url,
+      url: canonicalHref,
       email: SITE.email,
       address: {
         '@type': 'PostalAddress',
