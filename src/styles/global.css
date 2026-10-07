@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --canvas: #0b0e12;
   --surface: #14181f;
