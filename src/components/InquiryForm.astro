@@ -1,0 +1,47 @@
+---
+interface Props {
+  intent?: "buy" | "offer" | "contact";
+}
+const { intent = "offer" } = Astro.props;
+const options = [
+  ["buy", "Buy now"],
+  ["offer", "Make an offer"],
+  ["contact", "Ask a question"],
+] as const;
+---
+
+<form data-inquiry class="grid gap-4" novalidate>
+  <fieldset class="grid gap-2">
+    <legend class="text-sm font-medium text-mute">How do you want to proceed?</legend>
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      {
+        options.map(([value, label]) => (
+          <label class="flex min-h-12 cursor-pointer items-center justify-center rounded-xl border border-line px-3 text-center text-sm font-medium has-[:checked]:border-accent has-[:checked]:bg-wash">
+            <input class="sr-only" type="radio" name="intent" value={value} checked={value === intent} />
+            {label}
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <label class="grid gap-1.5 text-sm font-medium" for="inq-name">Name
+      <input id="inq-name" name="name" autocomplete="name" required class="min-h-12 rounded-xl border border-line bg-canvas px-3 text-base font-normal" />
+    </label>
+    <label class="grid gap-1.5 text-sm font-medium" for="inq-email">Email
+      <input id="inq-email" name="email" type="email" autocomplete="email" required class="min-h-12 rounded-xl border border-line bg-canvas px-3 text-base font-normal" />
+    </label>
+  </div>
+  <label class="grid gap-1.5 text-sm font-medium" for="inq-offer">Offer in USD <span class="font-normal text-mute">(offers only)</span>
+    <input id="inq-offer" name="offer" inputmode="numeric" placeholder="149000" class="min-h-12 rounded-xl border border-line bg-canvas px-3 text-base font-normal" />
+  </label>
+  <label class="grid gap-1.5 text-sm font-medium" for="inq-note">Intended use
+    <textarea id="inq-note" name="note" rows="4" class="rounded-xl border border-line bg-canvas px-3 py-3 text-base font-normal"></textarea>
+  </label>
+  <p data-error hidden class="text-sm" role="alert"></p>
+  <p data-status hidden class="text-sm" role="status"></p>
+  <button type="submit" data-cta="form" class="inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-5 text-base font-semibold text-onaccent">
+    Send to the owner
+  </button>
+  <p class="text-sm text-mute">Nothing is stored on this site. Submit opens an email so you can send it from your own account.</p>
+</form>

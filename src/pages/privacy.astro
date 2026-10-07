@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../config/site";
+
+const title = "Privacy | edesigrs.cloud";
+const description =
+  "edesigrs.cloud does not run a customer database. Inquiries leave your device as email. Theme preference stays in this browser.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+      <a href="/" class="hover:underline">Home</a> / Privacy
+    </p>
+    <h1 class="mt-3 font-serif text-5xl tracking-tight">Privacy</h1>
+    <div class="mt-6 grid gap-4 text-mute">
+      <p>
+        This prospectus does not ask you to create an account. The inquiry form does not post to a server. Choosing buy now, make an offer, or contact opens your own email program addressed to {SITE.email}. What you send is between you and that inbox.
+      </p>
+      <p>
+        A theme choice and a flag that you have already seen the exit note are stored in this browser only. Clearing site data removes them. No advertising pixel is installed. If a measurement ID is added later, this page will name the provider before that script loads.
+      </p>
+      <p>
+        The site is served over HTTPS on Cloudflare’s free Workers plan. Do not send passport scans, wiring instructions, or escrow passwords to the sales address. Payment details belong inside the escrow service both sides agree to use.
+      </p>
+      <p>Questions about this notice go to {SITE.email}.</p>
+    </div>
+  </article>
+</BaseLayout>

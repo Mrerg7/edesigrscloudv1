@@ -1,174 +1,224 @@
 ---
-import '../styles/global.css';
-import { SITE, OG_IMAGE, ACQUISITION_MAILTO } from '../config/site';
+import "../styles/global.css";
+import { OG_IMAGE, SITE, mailto } from "../config/site";
 
 interface Props {
   title?: string;
   description?: string;
-  ogImage?: string;
+  jsonLd?: unknown;
 }
 
-const {
-  title = SITE.title,
-  description = SITE.description,
-  ogImage = OG_IMAGE,
-} = Astro.props;
+const { title = SITE.title, description = SITE.description, jsonLd } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url);
+const path = Astro.url.pathname;
+const nav = [
+  { href: "/acquire/", label: "Acquire" },
+  { href: "/guides/", label: "Guides" },
+  { href: "/faq/", label: "FAQ" },
+];
 
-const canonicalURL = new URL(Astro.url.pathname, SITE.url);
-const canonicalHref = canonicalURL.href;
-const publishedDate = '2026-06-08';
-
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebSite',
-      '@id': `${canonicalHref}#website`,
-      url: canonicalHref,
-      name: SITE.name,
-      description,
-      inLanguage: 'en-US',
+const graph = [
+  {
+    "@type": "Organization",
+    "@id": `${SITE.url}/#organization`,
+    name: SITE.name,
+    url: `${SITE.url}/`,
+    email: SITE.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Phoenix",
+      addressRegion: "AZ",
+      addressCountry: "US",
     },
-    {
-      '@type': 'WebPage',
-      '@id': `${canonicalHref}#webpage`,
-      url: canonicalHref,
-      name: title,
-      description,
-      isPartOf: { '@id': `${canonicalHref}#website` },
-      datePublished: publishedDate,
-      dateModified: publishedDate,
-      inLanguage: 'en-US',
+  },
+  {
+    "@type": "WebSite",
+    "@id": `${SITE.url}/#website`,
+    url: `${SITE.url}/`,
+    name: SITE.name,
+    description: SITE.description,
+    inLanguage: "en-US",
+    publisher: { "@id": `${SITE.url}/#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE.url}/guides/?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
     },
-    {
-      '@type': 'Product',
-      '@id': `${canonicalHref}#product`,
-      name: 'edesigrs.cloud Premium Domain Name',
-      description:
-        'The cloud-native premium domain for electronic designers, generative artists, AI-powered creative platforms, and cloud-based design studios. Available for acquisition.',
-      url: canonicalHref,
-      image: ogImage,
-      category: 'Premium Domain Name',
-      brand: {
-        '@type': 'Brand',
-        name: 'edesigrs.cloud',
-      },
-      offers: {
-        '@type': 'Offer',
-        url: ACQUISITION_MAILTO,
-        price: '149000',
-        priceCurrency: 'USD',
-        availability: 'https://schema.org/InStock',
-        seller: {
-          '@type': 'Organization',
-          name: SITE.name,
-          email: SITE.email,
-        },
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: '0.00',
-            currency: 'USD',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 1,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 0,
-              maxValue: 0,
-              unitCode: 'DAY',
-            },
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'US',
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-          returnMethod: 'https://schema.org/ReturnByMail',
-          returnFees: 'https://schema.org/FreeReturn',
-          applicableCountry: 'US',
-          merchantReturnDays: 0,
-        },
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '5',
-        bestRating: '5',
-        ratingCount: '1',
-      },
-      review: {
-        '@type': 'Review',
-        author: {
-          '@type': 'Organization',
-          name: SITE.name,
-        },
-        reviewBody:
-          'The definitive cloud-native domain at the intersection of electronic design and generative AI — unmatched brand infrastructure for a scalable creative venture.',
-      },
-    },
-    {
-      '@type': 'Organization',
-      '@id': `${canonicalHref}#organization`,
-      name: SITE.name,
-      url: canonicalHref,
-      email: SITE.email,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Phoenix',
-        addressRegion: 'AZ',
-        addressCountry: 'US',
-      },
-    },
-  ],
-};
+  },
+];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content={SITE.googleSiteVerification} />
-
+    <meta name="theme-color" content="#0b0e12" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="buy .cloud domains, edesigrs.cloud for sale, premium domain names, domain marketplace, investment domains"
+    />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href={canonicalURL} />
-
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600&family=Instrument+Serif:ital@0;1&display=swap"
+    />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image" content={OG_IMAGE} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="edesigrs.cloud — Cloud-Native Premium Domain for Electronic Designers & AI Creatives" />
+    <meta property="og:image:alt" content="edesigrs.cloud premium domain for sale" />
     <meta property="og:locale" content={SITE.locale} />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content="edesigrs.cloud — Cloud-Native Premium Domain for Electronic Designers & AI Creatives" />
-
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <meta name="twitter:image" content={OG_IMAGE} />
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem("edesigrs-theme");
+          document.documentElement.dataset.theme = t === "light" ? "light" : "dark";
+        } catch (e) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": graph })} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
-    <slot />
+    <a
+      href="#content"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-3 focus:text-onaccent"
+    >
+      Skip to content
+    </a>
+    <header class="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur-md">
+      <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        <a href="/" class="flex min-h-12 items-center gap-2" aria-label="edesigrs.cloud home">
+          <span class="grid size-9 place-items-center rounded-lg bg-accent font-serif text-lg text-onaccent">e</span>
+          <span class="font-serif text-xl leading-none tracking-tight">edesigrs<span class="text-accent">.cloud</span></span>
+        </a>
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
+          {
+            nav.map((item) => (
+              <a
+                href={item.href}
+                aria-current={path.startsWith(item.href) ? "page" : undefined}
+                class="inline-flex min-h-12 items-center rounded-lg px-3 text-sm text-mute hover:text-ink"
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="flex items-center gap-2">
+          <button
+            id="theme-toggle"
+            type="button"
+            class="inline-flex size-12 items-center justify-center rounded-xl border border-line"
+            aria-label="Toggle color theme"
+          >
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+            </svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"></path>
+            </svg>
+          </button>
+          <a
+            href={mailto("offer")}
+            data-cta="make-offer"
+            class="hidden min-h-12 items-center rounded-xl bg-accent px-4 text-sm font-semibold text-onaccent sm:inline-flex"
+          >
+            Make an offer
+          </a>
+          <button
+            id="nav-toggle"
+            type="button"
+            class="inline-flex size-12 items-center justify-center rounded-xl border border-line md:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <span class="sr-only">Menu</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" hidden class="border-t border-line px-4 py-3 md:hidden" aria-label="Mobile">
+        <div class="grid">
+          {nav.map((item) => (
+            <a href={item.href} class="flex min-h-12 items-center text-base">{item.label}</a>
+          ))}
+          <a href={mailto("buy")} data-cta="buy-now" class="flex min-h-12 items-center text-base font-semibold">
+            Buy now · {SITE.priceLabel}
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="content">
+      <slot />
+    </main>
+
+    <footer class="border-t border-line">
+      <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <p class="font-serif text-2xl">edesigrs<span class="text-accent">.cloud</span></p>
+          <p class="mt-3 max-w-sm text-sm text-mute">One premium .cloud name, offered by the owner. Not a marketplace, not a hosted product.</p>
+        </div>
+        <div class="grid content-start gap-2 text-sm">
+          <p class="font-medium">Prospectus</p>
+          <a class="min-h-11 text-mute hover:text-ink" href="/acquire/">Acquire the name</a>
+          <a class="min-h-11 text-mute hover:text-ink" href="/guides/">Domain guides</a>
+          <a class="min-h-11 text-mute hover:text-ink" href="/guides/buy-cloud-domains/">Buying .cloud domains</a>
+          <a class="min-h-11 text-mute hover:text-ink" href="/guides/premium-domain-valuation/">Reading a premium price</a>
+        </div>
+        <div class="grid content-start gap-2 text-sm">
+          <p class="font-medium">Contact</p>
+          <a class="min-h-11 break-all text-mute hover:text-ink" href={mailto("contact")}>{SITE.email}</a>
+          <a class="min-h-11 text-mute hover:text-ink" href="/faq/">Common questions</a>
+          <a class="min-h-11 text-mute hover:text-ink" href="/privacy/">Privacy</a>
+          <p class="text-mute">{SITE.location}</p>
+        </div>
+      </div>
+      <p class="mx-auto max-w-6xl border-t border-line px-4 py-6 text-xs leading-relaxed text-mute sm:px-6">
+        This website is a domain prospectus. It is not an offer of software, a commitment to build a product, or a
+        guarantee of investment return. Transfer terms are confirmed in escrow. Information current as of {SITE.updated}.
+        © 2026 {SITE.name}.
+      </p>
+    </footer>
+
+    <div id="exit" hidden class="fixed inset-0 z-50 grid place-items-end bg-ink/40 p-4 sm:place-items-center">
+      <div role="dialog" aria-modal="true" aria-labelledby="exit-title" class="w-full max-w-md rounded-2xl border border-line bg-surface p-6">
+        <h2 id="exit-title" class="font-serif text-3xl tracking-tight">Take the one-page brief with you</h2>
+        <p class="mt-3 text-sm text-mute">
+          Price, transfer steps, and what is included. No discount code. The ask is {SITE.priceLabel}, and only one registration exists.
+        </p>
+        <div class="mt-5 grid gap-2">
+          <a href="/acquire/" class="inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-4 font-semibold text-onaccent">Read the acquisition page</a>
+          <a href={mailto("contact")} data-cta="contact" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-line px-4">Email the owner</a>
+          <button type="button" data-close class="min-h-12 text-sm text-mute">Keep browsing</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      import "../scripts/ui.ts";
+    </script>
   </body>
 </html>

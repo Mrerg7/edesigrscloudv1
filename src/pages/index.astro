@@ -1,30 +1,179 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import TrustBar from '../components/TrustBar.astro';
-import WhySection from '../components/WhySection.astro';
-import AiSection from '../components/AiSection.astro';
-import ForSection from '../components/ForSection.astro';
-import OpportunitySection from '../components/OpportunitySection.astro';
-import AcquisitionSection from '../components/AcquisitionSection.astro';
-import FaqSection from '../components/FaqSection.astro';
-import ClosingCTA from '../components/ClosingCTA.astro';
-import Footer from '../components/Footer.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { AUDIENCES, CATEGORIES, FAQS, GUIDES, WHY } from "../config/copy";
+import { SITE, mailto } from "../config/site";
+
+const productLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      name: "edesigrs.cloud premium domain name",
+      description: "Premium .cloud domain for electronic designers and AI creative software. Domain transfer only.",
+      category: "Premium domain name",
+      brand: { "@type": "Brand", name: SITE.name },
+      url: `${SITE.url}/`,
+      image: "https://imagedelivery.net/-sPAUAWeA405NiWJ0SNIQA/fb7221d2-dd3f-4e87-8831-df2f1bc06b00/public",
+      offers: {
+        "@type": "Offer",
+        url: `${SITE.url}/acquire/`,
+        price: SITE.price,
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        seller: { "@id": `${SITE.url}/#organization` },
+      },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
+};
 ---
 
-<BaseLayout>
-  <Nav />
-  <main>
-    <Hero />
-    <TrustBar />
-    <WhySection />
-    <AiSection />
-    <ForSection />
-    <OpportunitySection />
-    <AcquisitionSection />
-    <FaqSection />
-    <ClosingCTA />
-    <Footer />
-  </main>
+<BaseLayout jsonLd={productLd}>
+  <section class="border-b border-line">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:py-20">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-accent">Premium domain for sale</p>
+        <h1 class="mt-4 font-serif text-[3.25rem] leading-[0.92] tracking-tight sm:text-7xl lg:text-8xl">
+          edesigrs<span class="italic text-accent">.cloud</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-mute">
+          The short name for electronic designers, on the extension that already means infrastructure. Available from the owner. One registration.
+        </p>
+        <div class="mt-8 flex flex-wrap items-end gap-x-8 gap-y-3 border-y border-line py-5">
+          <div>
+            <p class="text-xs uppercase tracking-wide text-mute">Asking price</p>
+            <p class="font-serif text-4xl tracking-tight sm:text-5xl">{SITE.priceLabel}</p>
+          </div>
+          <p class="pb-1 text-sm text-mute">USD · one-time · domain only · escrow protected</p>
+        </div>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={mailto("buy")} data-cta="buy-now" class="inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-5 font-semibold text-onaccent">Buy now</a>
+          <a href={mailto("offer")} data-cta="make-offer" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-line px-5 font-semibold">Make an offer</a>
+          <a href={mailto("contact")} data-cta="contact" class="inline-flex min-h-12 items-center justify-center rounded-xl px-5 font-medium text-mute">Contact the owner</a>
+        </div>
+      </div>
+      <figure class="overflow-hidden rounded-2xl border border-line bg-surface">
+        <figcaption class="sr-only">Browser mock of a site living at edesigrs.cloud</figcaption>
+        <div class="flex items-center gap-2 border-b border-line px-4 py-3">
+          <span class="size-2.5 rounded-full bg-line"></span>
+          <span class="size-2.5 rounded-full bg-line"></span>
+          <span class="size-2.5 rounded-full bg-line"></span>
+          <span class="ml-2 truncate rounded-md bg-canvas px-3 py-1 text-xs text-mute">https://edesigrs.cloud</span>
+        </div>
+        <div class="grid gap-6 p-6 sm:p-8">
+          <p class="font-serif text-4xl leading-none">Design, <span class="italic text-accent">hosted.</span></p>
+          <p class="max-w-sm text-sm text-mute">A name your product can grow into: studios, generative tools, and the systems behind both.</p>
+          <dl class="grid grid-cols-3 gap-3 text-center">
+            <div class="rounded-xl bg-canvas px-2 py-3"><dt class="font-serif text-xl">8</dt><dd class="text-xs text-mute">letters</dd></div>
+            <div class="rounded-xl bg-canvas px-2 py-3"><dt class="font-serif text-xl">.cloud</dt><dd class="text-xs text-mute">TLD</dd></div>
+            <div class="rounded-xl bg-canvas px-2 py-3"><dt class="font-serif text-xl">1</dt><dd class="text-xs text-mute">owner</dd></div>
+          </dl>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="border-b border-line" aria-label="Transfer assurances">
+    <ul class="mx-auto grid max-w-6xl gap-4 px-4 py-6 sm:grid-cols-3 sm:px-6">
+      <li><p class="font-medium">Escrow protected</p><p class="text-sm text-mute">Escrow.com, Dan.com, or a provider both sides accept.</p></li>
+      <li><p class="font-medium">Secure transfer</p><p class="text-sm text-mute">Auth code or registrar push. Funds move after you control the name.</p></li>
+      <li><p class="font-medium">3–10 business days</p><p class="text-sm text-mute">Private close. Reply to qualified buyers within one business day.</p></li>
+    </ul>
+  </section>
+
+  <section id="why" class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <h2 class="max-w-2xl font-serif text-4xl tracking-tight sm:text-5xl">Why this name, not a coined leftover.</h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+      {WHY.map(([title, copy]) => (
+        <article class="rounded-2xl border border-line bg-surface p-6">
+          <h3 class="text-xl font-semibold tracking-tight">{title}</h3>
+          <p class="mt-3 text-mute">{copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="fit" class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <h2 class="font-serif text-4xl tracking-tight sm:text-5xl">Who it fits.</h2>
+      <p class="mt-3 max-w-md text-sm text-mute">Filter by practice. This is fit, not a catalog of other domains.</p>
+      <div class="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
+        <label class="sr-only" for="fit-search">Search audiences</label>
+        <input id="fit-search" class="min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-base lg:max-w-sm" placeholder="Search: agency, rendering, startup" />
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Audience categories">
+          {CATEGORIES.map((item) => (
+            <button type="button" data-category={item} aria-pressed={item === "All" ? "true" : "false"} class="min-h-12 rounded-full border border-line px-4 text-sm aria-pressed:border-accent aria-pressed:bg-wash">
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {AUDIENCES.map((item) => (
+          <article data-audience data-category={item.category} data-search={`${item.title} ${item.text} ${item.category}`.toLowerCase()} class="rounded-2xl border border-line bg-canvas p-5">
+            <p class="text-xs font-semibold uppercase tracking-wide text-accent">{item.category}</p>
+            <h3 class="mt-2 text-lg font-semibold">{item.title}</h3>
+            <p class="mt-2 text-sm text-mute">{item.text}</p>
+          </article>
+        ))}
+      </div>
+      <p id="fit-empty" hidden class="mt-6 text-mute">No match. Clear the search or choose All.</p>
+    </div>
+  </section>
+
+  <section id="acquire" class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <div class="grid gap-8 rounded-2xl border border-line bg-surface p-6 sm:p-10 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Acquisition</p>
+        <h2 class="mt-3 font-serif text-5xl tracking-tight sm:text-6xl">{SITE.priceLabel}</h2>
+        <p class="mt-2 text-mute">USD. One payment for the domain. No subscription, no equity, no implied revenue.</p>
+        <ol class="mt-8 grid gap-4 text-sm">
+          <li>1. You write. Buy now at the ask, or send a number you can close.</li>
+          <li>2. Both sides open escrow. You fund it. The name does not move on a promise.</li>
+          <li>3. Registrar transfer or push. Escrow pays the owner when the name is yours.</li>
+        </ol>
+      </div>
+      <div class="flex flex-col justify-end gap-3">
+        <a href={mailto("buy")} data-cta="buy-now" class="inline-flex min-h-12 items-center justify-center rounded-xl bg-accent font-semibold text-onaccent">Buy now at {SITE.priceLabel}</a>
+        <a href={mailto("offer")} data-cta="make-offer" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-line font-semibold">Make an offer</a>
+        <a href="/acquire/" class="inline-flex min-h-12 items-center justify-center rounded-xl font-medium text-mute">Full acquisition page</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+    <h2 class="text-center font-serif text-4xl tracking-tight">Common questions</h2>
+    <div class="mt-8 grid gap-3">
+      {FAQS.map((item, index) => (
+        <div class="rounded-2xl border border-line bg-surface">
+          <button type="button" class="faq-q flex min-h-12 w-full items-center justify-between gap-4 px-5 py-4 text-left font-medium" aria-expanded={index === 0 ? "true" : "false"}>
+            {item.q}
+          </button>
+          <p class="faq-a px-5 pb-5 text-mute" hidden={index !== 0}>{item.a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-t border-line">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <h2 class="font-serif text-4xl tracking-tight">Read before you wire anyone.</h2>
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        {GUIDES.map((guide) => (
+          <a href={`/guides/${guide.slug}/`} class="rounded-2xl border border-line p-6 hover:bg-surface">
+            <p class="text-xs font-semibold uppercase tracking-wide text-accent">{guide.kicker}</p>
+            <h3 class="mt-2 font-serif text-3xl tracking-tight">{guide.title}</h3>
+            <p class="mt-3 text-sm text-mute">{guide.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 </BaseLayout>
