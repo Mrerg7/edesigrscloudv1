@@ -143,10 +143,27 @@ document.querySelectorAll<HTMLElement>("[data-close]").forEach((button) => {
 });
 
 if (!sessionStorage.getItem("edesigrs-exit") && !window.matchMedia("(pointer: coarse)").matches) {
+  const started = performance.now();
+  let entered = false;
+  let armed = false;
+
+  const tryArm = () => {
+    const elapsed = performance.now() - started;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const deep = max > 80 && window.scrollY / max >= 0.55;
+    if (elapsed >= 12000 || (deep && elapsed >= 8000)) armed = true;
+  };
+
+  const dwell = window.setTimeout(tryArm, 12000);
+  document.documentElement.addEventListener("mouseenter", () => {
+    entered = true;
+  });
+  document.addEventListener("scroll", tryArm, { passive: true });
   document.documentElement.addEventListener("mouseleave", (event) => {
-    if (event.clientY > 0) return;
+    if (!entered || !armed || event.clientY > 0) return;
     sessionStorage.setItem("edesigrs-exit", "1");
     document.getElementById("exit")?.removeAttribute("hidden");
+    window.clearTimeout(dwell);
   });
 }
 
